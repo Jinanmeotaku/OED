@@ -12,7 +12,7 @@ import { selectUnitDataById } from '../../redux/api/unitsApi';
 import { useAppSelector } from '../../redux/reduxHooks';
 import '../../styles/card-page.css';
 import { conversionArrow } from '../../utils/conversionArrow';
-import translate from '../../utils/translate';
+import { useTranslate } from '../../redux/componentHooks';
 import EditConversionModalComponent from './EditConversionModalComponent';
 
 interface ConversionViewComponentProps {
@@ -25,6 +25,7 @@ interface ConversionViewComponentProps {
  * @returns Single conversion element
  */
 export default function ConversionViewComponent(props: ConversionViewComponentProps) {
+	const translate = useTranslate();
 	// Don't check if admin since only an admin is allow to route to this page.
 
 	// Edit Modal Show
@@ -40,7 +41,7 @@ export default function ConversionViewComponent(props: ConversionViewComponentPr
 	};
 
 	// Create header from sourceId, destinationId identifiers
-	const header = String(unitDataById[props.conversion.sourceId]?.identifier + conversionArrow(props.conversion.bidirectional) +
+	const conversionIdentifier = String(unitDataById[props.conversion.sourceId]?.identifier + conversionArrow(props.conversion.bidirectional) +
 		unitDataById[props.conversion.destinationId]?.identifier);
 
 	// Unlike the details component, we don't check if units are loaded since must come through that page.
@@ -48,7 +49,7 @@ export default function ConversionViewComponent(props: ConversionViewComponentPr
 	return (
 		<div className="card">
 			<div className="identifier-container">
-				{header}
+				{conversionIdentifier}
 			</div>
 			<div className="item-container">
 				<b><FormattedMessage id="conversion.source" /></b> {unitDataById[props.conversion.sourceId]?.identifier}
@@ -77,7 +78,7 @@ export default function ConversionViewComponent(props: ConversionViewComponentPr
 				<EditConversionModalComponent
 					show={showEditModal}
 					conversion={props.conversion}
-					header={header}
+					conversionIdentifier={conversionIdentifier}
 					handleShow={handleShow}
 					handleClose={handleClose} />
 			</div>

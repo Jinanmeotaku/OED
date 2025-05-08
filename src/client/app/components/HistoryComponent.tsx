@@ -6,6 +6,9 @@ import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/reduxHooks';
 import { selectForwardHistory, selectPrevHistory } from '../redux/slices/graphSlice';
 import { historyStepBack, historyStepForward } from '../redux/actions/extraActions';
+import TooltipMarkerComponent from './TooltipMarkerComponent';
+import { rowFlexStart } from '../styles/modalStyle';
+
 /**
  * @returns Renders a history component with previous and next buttons.
  */
@@ -15,7 +18,7 @@ export default function HistoryComponent() {
 	const forwardStack = useAppSelector(selectForwardHistory);
 
 	return (
-		<div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+		<div style={rowFlexStart}>
 			<svg width={20} height={20} style={{ visibility: !backStack.length ? 'hidden' : 'visible', cursor: 'pointer' }}
 				onClick={() => dispatch(historyStepBack())}
 				viewBox="0 0 10 10" fill="none"
@@ -28,6 +31,9 @@ export default function HistoryComponent() {
 			>
 				<path d="M5 1L9 5L5 9" stroke={'black'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
 			</svg>
+			<div style={{ marginLeft: '5px', visibility: !forwardStack.length && !backStack.length ? 'hidden' : 'visible' }}>
+				<TooltipMarkerComponent page='home' helpTextId={'help.home.history'} />
+			</div>
 		</div >
 	);
 }
